@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage-service-app
+  labels:
+    app: storage-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app : storage-service-app
+  template:
+    metadata:
+      labels:
+        app: storage-service-app
+    spec:
+      containers:
+      - name: storage-service-app
+        image: zmhtet/storage-service:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 9003
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  storage-service-svc
+spec:
+  selector:
+    app:  storage-service-app
+  ports:
+  - port:  9003
+    targetPort:  9003

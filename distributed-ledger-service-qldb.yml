@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: distributed-ledger-service-qldb-app
+  labels:
+    app: distributed-ledger-service-qldb-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app : distributed-ledger-service-qldb-app
+  template:
+    metadata:
+      labels:
+        app: distributed-ledger-service-qldb-app
+    spec:
+      containers:
+      - name: distributed-ledger-service-qldb-app
+        image: zmhtet/distributed-ledger-service-qldb:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 9002
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  distributed-ledger-service-qldb-svc
+spec:
+  selector:
+    app:  distributed-ledger-service-qldb-app
+  type: NodePort
+  ports:
+  - port:  9002
+    targetPort:  9002
+    nodePort: 30902

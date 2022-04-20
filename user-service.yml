@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-app
+  labels:
+    app: user-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app : user-service-app
+  template:
+    metadata:
+      labels:
+        app: user-service-app
+    spec:
+      containers:
+      - name: user-service-app
+        image: zmhtet/user-service:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 9001
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  user-service-svc
+spec:
+  selector:
+    app:  user-service-app
+  type: NodePort
+  ports:
+  - port:  9001
+    targetPort:  9001
+    nodePort: 30901
